@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<link rel="stylesheet" href="{{ url_for('static', filename= 'css/style.css') }}">
+		<title>Music recommandation</title>
+	</head>
+	<body>
+		<h1>Welcome to the Music recommandation system</h1>
+		<h2>Select your favorite(s) artists and we recommend you!</h2>
+		<p>Select your favorite(s) artits :</p>
+		<FORM name="Lettre" action="/">
+			<input type="submit" value="0-9">
+			{% for letter in letter_list%}
+				<input type="submit" value="{{letter}}">
+			{% endfor %}
+		</FORM>
+		<p id="block_selection">
+			<p>
+				<FORM name="Item_1" action="http://localhost:5000/result" method="post">
+					<SELECT MULTIPLE name="research" size="5">
+						<OPTION value="">--Please choose (an) artist(s)--</OPTION>
+						{% for names in artists_names %}
+							<OPTION value="{{names}}">{{names}}</OPTION>
+						{% endfor %}
+					</SELECT>
+					<input type="submit">
+				</FORM>
+			</p>
+			<br>
+			<p> OR </p>
+			<br>
+			<p>
+				<p>Enter your favorite(s) artits :</p>
+				<p>
+					<FORM name="Item_1" action="http://localhost:5000/result" method="post">
+						<input name="research" size="5">
+						<input type="submit">
+					</FORM>
+				</p>
+				<p>If you want enter a list, separate elements by a comma (,)</p>				
+			</p>
+		</p>
+	</body>
+</html>
