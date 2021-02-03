@@ -4,10 +4,10 @@ from scipy.sparse import csr_matrix
 from lightfm import LightFM
 
 def create_ap():
-    plays = pd.read_csv('/home/anthony/Documents/Briefs/2_Block_janv_fev/20210112_recommendation_system/api/static/lastfm/user_artists.dat', sep='\t') ## Dataset of relation between an artist 
+    plays = pd.read_csv('./api/static/lastfm/user_artists.dat', sep='\t') ## Dataset of relation between an artist 
 
     ## an user and the number listening 
-    artists = pd.read_csv('/home/anthony/Documents/Briefs/2_Block_janv_fev/20210112_recommendation_system/api/static/lastfm//artists.dat', sep='\t', usecols=['id','name','url']) ## id	name	url	pictureURL
+    artists = pd.read_csv('./api/static/lastfm//artists.dat', sep='\t', usecols=['id','name','url']) ## id	name	url	pictureURL
 
     # Merge artist and user pref data
     ap = pd.merge(artists, plays, how="inner", left_on="id", right_on="artistID")
