@@ -14,7 +14,7 @@ from api.fonction import get_ratings_df, fit_model, add_new_user, preprocessing
 
 
 ## load DataFrame and merge them
-ap = create_ap()
+ap, artists = create_ap()
 ap = preprocessing(ap)
 artist_names = ap.sort_values("artistID")["name"].unique()
 
@@ -27,13 +27,14 @@ artist_names = ap.sort_values("artistID")["name"].unique()
 app = Flask(__name__)
 
 ## page 1 : index
-@app.route('/')
+@app.route('/', methods = ['GET', 'POST'])
 def index():
+    if request.method == 'GET':
+        pass
     letter_list = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 
                    'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R',
                    'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'] 
     letter = request.form.getlist("Lettre")
-    print(letter)
     artists_names = sorted(list(artist_names))
     return render_template('index.html', artists_names=artists_names[60:-725], letter_list=letter_list)
 
@@ -42,7 +43,7 @@ def index():
 def result():
     ## liste retournée par page index
     user_artist_list = request.form.getlist("research")
-
+    print(user_artist_list)
     ## Pivot Matrix rating    
     ratings_df = get_ratings_df(ap)
 
@@ -57,10 +58,12 @@ def result():
     model = fit_model(X)
 
     ## Make predictions
-    top_items_pred = get_recommandation(user, model, user_ids, ap, n_reco=10)
-    reco = [item for item in top_items_pred if item not in user_artist_list]
+    top_items_pred = get_recommandation(user, model, user_ids, ap, ratings_df,artist_names, n_reco=10)
+    reco = [[artist, artists[artists['name']==artist].url.values[0]] for artist in top_items_pred if artist not in user_artist_list]
+    reco = reco[:20]
 
-    return render_template('result.html', selection = user_artist_list, recommandations = reco[:20])
+    return render_template('result.html', selection = user_artist_list, recommandations=reco)
+
 
 if __name__ == "__main__":
     app.run()

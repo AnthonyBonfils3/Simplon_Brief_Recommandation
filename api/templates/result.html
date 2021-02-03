@@ -1,26 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" href="{{ url_for('static', filename= 'css/style.css') }}">
-    <title>Music recommandation</title>
-</head>
-<body>
-   <h1>Resultat pour : {% for select in selection %} {{select}}, {% endfor%}</h1>
-   <div id ='block_reponses'>
-      <ul>
-         {% for reco in recommandations %}
-            <li>{{reco}}</li>
-         {% endfor %}
-      </ul>
-   </div>
-   <br>
-   <br>
-</body>
-<footer>
-   <form id='return_button' action="/">
-      <input type=submit value="Return to home page">
-   </form>
-   
-</footer>
+   <head>
+      <meta charset="UTF-8">
+      <link rel="stylesheet" href="{{ url_for('static', filename= 'css/style.css') }}">
+      <title>Music recommandation</title>
+   </head>
+   <body>
+      <h1>Resultat pour : {% for select in selection %} {{select}}, {% endfor%}</h1>
+      <div id ='block_reponses'>
+         <ul>
+            {% for reco in recommandations %}
+               <li><a href={{reco[1]}} target="_blank">{{reco[0]}}</a></li>
+            {% endfor %}
+         </ul>
+      </div>
+      <br>
+      <br>
+      <form id='return_button' action="/">
+         <input type=submit value="Return to home page">
+      </form>
+   </body>
+	<footer class="footer">
+		<h2>Ecole MICROSOFT Powered by SIMPLON</h2>
+		<h2>Promo 2020 / 2022</h2>
+		<h2>Par Anthony Bonfils</h2>
+    </footer>
 </html>

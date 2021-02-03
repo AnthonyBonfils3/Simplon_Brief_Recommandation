@@ -7,7 +7,7 @@ def create_ap():
     plays = pd.read_csv('/home/anthony/Documents/Briefs/2_Block_janv_fev/20210112_recommendation_system/api/static/lastfm/user_artists.dat', sep='\t') ## Dataset of relation between an artist 
 
     ## an user and the number listening 
-    artists = pd.read_csv('/home/anthony/Documents/Briefs/2_Block_janv_fev/20210112_recommendation_system/api/static/lastfm//artists.dat', sep='\t', usecols=['id','name']) ## id	name	url	pictureURL
+    artists = pd.read_csv('/home/anthony/Documents/Briefs/2_Block_janv_fev/20210112_recommendation_system/api/static/lastfm//artists.dat', sep='\t', usecols=['id','name','url']) ## id	name	url	pictureURL
 
     # Merge artist and user pref data
     ap = pd.merge(artists, plays, how="inner", left_on="id", right_on="artistID")
@@ -25,7 +25,7 @@ def create_ap():
     ap = ap.join(artist_rank, on="name", how="inner") \
         .sort_values(['playCount'], ascending=False)
 
-    return ap
+    return ap, artists
 
 def preprocessing(ap):
     # Preprocessing
@@ -41,11 +41,9 @@ def get_ratings_df(ap):
 
 def get_X(ratings_df):
     ratings = ratings_df.fillna(0).values
-
     # Build a sparse matrix
     X = csr_matrix(ratings)
-    Xcoo = X.tocoo()
-    return Xcoo
+    return X
 
 def add_new_user(ratings_df, select, artist_names, ap):
     user_ids = ratings_df.index.values
@@ -63,26 +61,24 @@ def add_new_user(ratings_df, select, artist_names, ap):
 
 def fit_model(X):
     learn_rate = 0.05
-    nb_epochs = 25
+    nb_epochs = 20
     k = 10
     loss = 'warp-kos'
     nb_comp = 20
     model = LightFM(learning_rate=learn_rate, k=k, loss=loss, 
                  random_state = 42, no_components=nb_comp)
-    model.fit(X, epochs=nb_epochs, num_threads=2)
+    model.fit(X, epochs=nb_epochs, num_threads=4)
     return model
 
-def get_recommandation(userID, model, user_ids, ap, n_reco=10):
-    artist_names = ap.sort_values("artistID")["name"].unique()
-    ratings_df = get_ratings_df(ap)
+def get_recommandation(userID, model, user_ids, ap, ratings_df, artist_names, n_reco=30):
+
     n_users, n_items = ratings_df.shape
     liste_user_idx = list(user_ids)
     idx = liste_user_idx.index(userID)
+
     scores = model.predict(idx, np.arange(n_items))
     top_items_pred = artist_names[np.argsort(-scores)]
-    return top_items_pred
+    return top_items_pred[:30]
     
-
-
 if __name__ == '__main__':
     pass

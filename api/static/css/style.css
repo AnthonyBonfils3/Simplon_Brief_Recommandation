@@ -4,7 +4,6 @@ body {
 }
 
 h1 {
-    
     color: rgb(107, 129, 143);
     text-align: center;
     padding: 10px;
@@ -17,6 +16,10 @@ h2 {
 p, form {
 	text-align: center;
 	color: red;
+}
+
+a:visited {
+	text-decoration: none;
 }
 
 div {
@@ -64,6 +67,13 @@ div {
 	box-shadow: 10px 5px 5px grey;
 	text-align: left;
 	font-size: medium;
-	
+}
 
+.footer{
+	display: flex;
+	flex-direction: raw;
+	justify-content: space-around;
+	flex-wrap: wrap;
+	color: rgb(107, 129, 143);
+	background-color: white;
 }
