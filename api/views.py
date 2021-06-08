@@ -26,6 +26,8 @@ artist_names = ap.sort_values("artistID")["name"].unique()
 
 app = Flask(__name__)
 
+
+
 ## page 1 : index
 @app.route('/', methods = ['GET', 'POST'])
 def index():
@@ -65,8 +67,8 @@ def result():
     return render_template('result.html', selection = user_artist_list, recommandations=reco)
 
 
-if __name__ == "__main__":
-    app.run()
+# if __name__ == "__main__":
+#     app.run()
     
 
     
